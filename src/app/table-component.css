@@ -1,0 +1,105 @@
+table {
+  width: 100%;
+}
+
+.header {
+  background-color: #444; color: #DDD; font-weight: bold; font-size: medium; font-family: Tahoma;
+}
+
+.header-sep {
+  width: 8px; background: linear-gradient(to right, #888 0%,#666 10%, #444 20%, #444 100%);
+}
+
+.cell-sep {
+  width: 8px; background: linear-gradient(to right,#CCC 0%,#FFF 10%, rgba(255,255,255,0) 20%, rgba(255,255,255,0) 100%);
+}
+
+::ng-deep .mat-sort-header-container {
+  display:flex;
+  justify-content:center;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-column-name {
+  width: 80px;
+}
+
+.mat-column-date {
+  width: 80px; text-align: center;
+}
+
+.mat-column-color {
+  width: 96px;
+}
+
+.mat-column-locked {
+  width: 96px; text-align: center; 
+}
+
+.mat-column-salary {
+  width: 60px;
+}
+
+.mat-column-id, .mat-column-index {
+  width: 40px;
+}
+
+.oddRow{background-color: rgb(244, 255, 244)}
+.evenRow{background-color:rgb(244, 244, 255)}
+
+.id-filter {
+  width: 96px
+}
+
+.email-filter {
+  width: 160px
+}
+
+.salary-filter {
+  width: 128px
+}
+
+.mat-form-field[_ngcontent-c12] {
+  width: 160px;
+}
+
+.id-icon {
+  color: #008;
+}
+
+.mail-icon {
+  color: #880;
+}
+
+.salary-icon {
+  color: #080;
+}
+
+input[type='number'] {
+  -moz-appearance:textfield
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background, .mat-accent .mat-pseudo-checkbox-checked, .mat-accent .mat-pseudo-checkbox-indeterminate, .mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate {
+  background-color: maroon !important;
+}
+
+.since {
+  text-align: right;
+}
+
+::ng-deep .mat-select-value {
+  font-size: 120%; color: rgba(0,0,0,0.5);
+}
+
+::ng-deep .mat-sort-header-arrow {
+  color: #CCC !important;
+}
