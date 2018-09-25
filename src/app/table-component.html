@@ -24,21 +24,21 @@
       </ng-container>
   
       <!-- Sep Column -->
-      <ng-container matColumnDef="name-sep">
+      <ng-container matColumnDef="email-sep">
         <th class="header-sep" mat-header-cell *matHeaderCellDef></th>
         <td class="cell-sep" mat-cell *matCellDef></td>
         <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
 
-      <!-- Name Column -->
-      <ng-container matColumnDef="name">
-        <th class="header" mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <!-- Email Column -->
+      <ng-container matColumnDef="email">
+        <th class="header" mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
         <td mat-cell *matCellDef="let row">
           <mat-form-field floatLabel="never">
-            <input matInput placeholder="Name" [(ngModel)]="row.name" [email]="true" (blur)="changeName($event.target.value, row.id)"
-                                                            (keyup.enter)="changeName($event.target.value, row.id)" required>
+            <input matInput placeholder="Email" [(ngModel)]="row.email" [email]="true" (blur)="changeEmail($event.target.value, row.id)"
+                                                            (keyup.enter)="changeEmail($event.target.value, row.id)" required>
             <mat-icon matSuffix>mode_edit</mat-icon>                                                        
-            <mat-error *ngIf="row.name">Invalid e-mail</mat-error>
+            <mat-error *ngIf="row.email">Invalid e-mail</mat-error>
           </mat-form-field>        
         </td>
         <td mat-footer-cell *matFooterCellDef></td>
@@ -59,16 +59,16 @@
       </ng-container>
   
       <!-- Sep Column -->
-      <ng-container matColumnDef="color-sep">
+      <ng-container matColumnDef="quality-sep">
         <th class="header-sep" mat-header-cell *matHeaderCellDef></th>
         <td class="cell-sep" mat-cell *matCellDef></td>
         <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
 
-      <!-- Color Column -->
-      <ng-container matColumnDef="color">
-        <th class="header" mat-header-cell *matHeaderCellDef mat-sort-header> Color </th>
-        <td mat-cell *matCellDef="let row" [style.color]="row.color.name"> {{row.color.name}} </td>
+      <!-- Quality Column -->
+      <ng-container matColumnDef="quality">
+        <th class="header" mat-header-cell *matHeaderCellDef mat-sort-header> Quality </th>
+        <td mat-cell *matCellDef="let row" [style.color]="row.quality.color"> {{row.quality.value}} </td>
         <td mat-footer-cell *matFooterCellDef></td>
       </ng-container>
   
@@ -121,18 +121,18 @@
         </th>
       </ng-container>
   
-      <ng-container matColumnDef="name-filter-sep">
+      <ng-container matColumnDef="email-filter-sep">
         <th mat-header-cell *matHeaderCellDef>    
         </th>
       </ng-container>
 
-      <!-- Name Column Filter -->
-      <ng-container matColumnDef="name-filter">
+      <!-- Email Column Filter -->
+      <ng-container matColumnDef="email-filter">
         <th mat-header-cell *matHeaderCellDef>
           <mat-form-field class="email-filter">
-            <input matInput placeholder="Filter by e-mail" [ngModel]="nameFilter" [email]="true" (keyup)="filterByName($event.target.value)" >
+            <input matInput placeholder="Filter by e-mail" [ngModel]="emailFilter" [email]="true" (keyup)="filterByEmail($event.target.value)" >
             <mat-icon  class="mail-icon" matSuffix>mail</mat-icon>
-            <mat-error *ngIf="nameFilter">Invalid e-mail</mat-error>
+            <mat-error *ngIf="emailFilter">Invalid e-mail</mat-error>
           </mat-form-field>
         </th>
       </ng-container>
@@ -152,19 +152,19 @@
         </th>
       </ng-container>
   
-      <ng-container matColumnDef="color-filter-sep">
+      <ng-container matColumnDef="quality-filter-sep">
         <th mat-header-cell *matHeaderCellDef>
         </th>
       </ng-container>
 
-        <!-- Color Column Filter -->
-      <ng-container matColumnDef="color-filter">
+        <!-- Quality Column Filter -->
+      <ng-container matColumnDef="quality-filter">
         <th mat-header-cell *matHeaderCellDef>
-          <mat-select (selectionChange)="filterByColor($event.value, colorSelect)" [ngModel]="colorFilter" multiple #colorSelect placeholder="Filter by color">
-            <mat-select-trigger><span>Filter by color</span></mat-select-trigger>
-            <button  mat-raised-button class="mat-primary fill text-sm" (click)="selectAll(colorSelect, true)">Select All</button>
-            <button mat-raised-button class="mat-accent fill text-sm" (click)="selectAll(colorSelect, false)">Deselect All</button>
-            <mat-option *ngFor="let q of qualities" [value]="q" [style.backgroundColor]="getColor(q).name">{{q}}</mat-option>
+          <mat-select (selectionChange)="filterByQuality($event.value, qualitySelect)" [ngModel]="qualityFilter" multiple #qualitySelect placeholder="Filter by quality">
+            <mat-select-trigger><span>Filter by quality</span></mat-select-trigger>
+            <button  mat-raised-button class="mat-primary fill text-sm" (click)="selectAll(qualitySelect, true)">Select All</button>
+            <button mat-raised-button class="mat-accent fill text-sm" (click)="selectAll(qualitySelect, false)">Deselect All</button>
+            <mat-option *ngFor="let q of qualities" [value]="q" [style.backgroundColor]="getColor(q)">{{q}}</mat-option>
           </mat-select>
         </th>
       </ng-container>

@@ -8,21 +8,22 @@ import { webSocket, WebSocketSubject } from 'rxjs/websocket';
 
 export interface EmployeeProfile {
   id: number;
-  name: string;
+  email: string;
   salary: number;
-  color: {name: string, quality: number};
+  quality: {color: string, value: number};
   date: Date;
   locked: boolean;
 }
 
-const COLORS = [{name: 'maroon', quality: 1}, {name: 'red', quality: 2}, {name: 'orange', quality: 3}, {name: 'yellow', quality: 4},
-                {name: 'olive', quality: 5}, {name: 'green', quality: 6}, {name: 'purple', quality: 7}, {name: 'fuchsia', quality: 8},
-                {name: 'lime', quality: 9}, {name: 'teal', quality: 10}, {name: 'aqua', quality: 11}, {name: 'blue', quality: 12},
-                {name: 'navy', quality: 13}, {name: 'black', quality: 14}, {name: 'gray', quality: 15}];
+const QUALITIES = [{color: 'maroon', value: 1}, {color: 'red', value: 2}, {color: 'orange', value: 3}, {color: 'yellow', value: 4},
+                {color: 'olive', value: 5}, {color: 'green', value: 6}, {color: 'purple', value: 7}, {color: 'fuchsia', value: 8},
+                {color: 'lime', value: 9}, {color: 'teal', value: 10}, {color: 'aqua', value: 11}, {color: 'blue', value: 12},
+                {color: 'navy', value: 13}, {color: 'black', value: 14}, {color: 'gray', value: 15}];
 
-const NAMES: string[] = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
-  'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
-  'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
+const NAMES: string[] = ['Maia@gmail.com', 'Asher@yahoo.com', 'Olivia@hotmail.com', 'Atticus@comda.co.il',
+'Amelia@gmail.com', 'Jack@hotmail.com', 'Charlotte@hotmail.com', 'Theodore@gmail.com', 'Isla@yahoo.com',
+'Oliver@comda.co.il', 'Isabella@gmail.com', 'Jasper@comda.co.il', 'Cora@comda.co.il', 'Levi@gmail.com', 'Violet@yahoo.com',
+'Arthur@hotmail.com', 'Mia@comda.co.il', 'Thomas@yahoo.com', 'Elizabeth@gmail.com'];
 
 interface Notification {
   data: string;
@@ -42,17 +43,17 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: 'table-component.html',
 })
 export class TableComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = ['index', 'id-sep', 'id', 'name-sep', 'name', 'salary-sep', 'salary', 'color-sep',
-                                                            'color', 'date-sep', 'date', 'locked-sep', 'locked'];
-  filterColumns: string[] =    ['index-filter', 'id-filter-sep', 'id-filter', 'name-filter-sep', 'name-filter',
-          'salary-filter-sep', 'salary-filter', 'color-filter-sep', 'color-filter', 'date-filter-sep',
+  displayedColumns: string[] = ['index', 'id-sep', 'id', 'email-sep', 'email', 'salary-sep', 'salary', 'quality-sep',
+                                                            'quality', 'date-sep', 'date', 'locked-sep', 'locked'];
+  filterColumns: string[] =    ['index-filter', 'id-filter-sep', 'id-filter', 'email-filter-sep', 'email-filter',
+          'salary-filter-sep', 'salary-filter', 'quality-filter-sep', 'quality-filter', 'date-filter-sep',
           'date-filter', 'locked-filter-sep', 'locked-filter'];
 
   dataSource: MatTableDataSource<EmployeeProfile>;
   idFilter: string;
-  nameFilter: string;
+  emailFilter: string;
   salaryFilter: number;
-  colorFilter: number[];
+  qualityFilter: number[];
   statusFilter: boolean;
   qualities: number[];
   statuses: Array<{status: string, value?: boolean}>;
@@ -87,8 +88,8 @@ export class TableComponent implements OnInit, OnDestroy {
   constructor(private formBuilder: FormBuilder, private http: HttpClientService) {
     console.log('TableComponent c-tor ...');
     this.total = 0;
-    this.qualities = Array.from(COLORS).map(color => +color.quality);
-    this.colorFilter = this.qualities;
+    this.qualities = Array.from(QUALITIES).map(quality => +quality.value);
+    this.qualityFilter = this.qualities;
     this.statuses = [{status: 'Any', value: undefined}, {status: 'Locked', value: true}, {status: 'Unlocked', value: false}];
 
     this.myForm = this.formBuilder.group({'sinceDatePicker': [], 'tillDatePicker': []});
@@ -104,8 +105,8 @@ export class TableComponent implements OnInit, OnDestroy {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.dataSource.sortingDataAccessor = (record, header) => {
-      if (header === 'color') {
-        return record.color.quality;
+      if (header === 'quality') {
+        return record.quality.value;
       }
       return record[header];
     };
@@ -114,9 +115,9 @@ export class TableComponent implements OnInit, OnDestroy {
 
     const _ = this.http.load('' + new Date().getTime()).subscribe(records => records.map(employee => data.push({
         id: employee.uid,
-        name: employee.name,
+        email: employee.email,
         salary: employee.salary,
-        color: this.getColor(employee.quality),
+        quality: this.getColor(employee.value),
         date: employee.hired,
         locked: !employee.contract
       })
@@ -126,13 +127,13 @@ export class TableComponent implements OnInit, OnDestroy {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.dataSource.sortingDataAccessor = (record, header) => {
-        if (header === 'color') {
-          return record.color.quality;
+        if (header === 'quality') {
+          return record.quality.value;
         }
         return record[header];
       };
 
-      this.subject = webSocket('ws://localhost:8080/DemoMvcApp/name');
+      this.subject = webSocket('ws://localhost:8080/DemoMvcApp/email');
       this.subject.subscribe(
           (msg) => {
             // console.log('message received: ' + msg.data);
@@ -174,7 +175,7 @@ export class TableComponent implements OnInit, OnDestroy {
     if (this.dataSource) {
       data = (this.dataSource.data as EmployeeProfile[]);
     }
-    data.find(e => e.id === 2).name = Math.random().toString();
+    data.find(e => e.id === 2).email = Math.random().toString();
     this.dataSource.data = data;
     this.table.renderRows();
   }
@@ -186,9 +187,9 @@ export class TableComponent implements OnInit, OnDestroy {
     }
     data.push({
         id: 123456,
-        name: Math.random().toString(),
+        email: Math.random().toString(),
         salary: 9999,
-        color: COLORS[Math.round(Math.random() * (COLORS.length - 1))],
+        quality: QUALITIES[Math.round(Math.random() * (QUALITIES.length - 1))],
         date: new Date(+(new Date()) - Math.floor(Math.random() * 10000000000)),
         locked: Math.round(Math.random() * 1000) % 2 === 0,
     });
@@ -203,7 +204,7 @@ export class TableComponent implements OnInit, OnDestroy {
         return false;
       }
 
-      if (this.nameFilter && !record.name.toLowerCase().startsWith(this.nameFilter)) {
+      if (this.emailFilter && !record.email.toLowerCase().startsWith(this.emailFilter)) {
         return false;
       }
 
@@ -215,7 +216,7 @@ export class TableComponent implements OnInit, OnDestroy {
         return false;
       }
 
-      if (this.colorFilter && !this.colorFilter.includes(record.color.quality) ) {
+      if (this.qualityFilter && !this.qualityFilter.includes(record.quality.value) ) {
         return false;
       }
 
@@ -236,22 +237,22 @@ export class TableComponent implements OnInit, OnDestroy {
     this.applyFilter();
   }
 
-  changeName(value, id) {
-    this.http.updateName(id, value);
+  changeEmail(value, id) {
+    this.http.updateEmail(id, value);
     this.applyFilter();
   }
 
-  getColor(quality: number) {
-    return COLORS.find(c => c.quality === quality);
+  getColor(value: number) {
+    return QUALITIES.find(c => c.value === value).color;
   }
 
   selectAll(el: NgModel, select: boolean) {
     const qualities = select ? this.qualities : [];
-    this.filterByColor(qualities, el);
+    this.filterByQuality(qualities, el);
   }
 
-  filterByColor(filterValue: number[], select: NgModel) {
-    this.colorFilter = filterValue;
+  filterByQuality(filterValue: number[], select: NgModel) {
+    this.qualityFilter = filterValue;
     this.applyFilter();
   }
 
@@ -265,8 +266,8 @@ export class TableComponent implements OnInit, OnDestroy {
     this.applyFilter();
   }
 
-  filterByName(filterValue: string) {
-    this.nameFilter = filterValue.length ? filterValue.toLowerCase() : null;
+  filterByEmail(filterValue: string) {
+    this.emailFilter = filterValue.length ? filterValue.toLowerCase() : null;
     this.applyFilter();
   }
 
@@ -305,15 +306,13 @@ export class TableComponent implements OnInit, OnDestroy {
 }
 
 function createEmployees(id: number): EmployeeProfile {
-  const name =
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
+  const email = NAMES[Math.round(Math.random() * (NAMES.length - 1))];
 
   return {
     id: id,
-    name: name,
+    email: email,
     salary: Math.round(Math.random() * 1000) + 1000,
-    color: COLORS[Math.round(Math.random() * (COLORS.length - 1))],
+    quality: QUALITIES[Math.round(Math.random() * (QUALITIES.length - 1))],
     date: new Date(+(new Date()) - Math.floor(Math.random() * 20000000000)),
     locked: Math.round(Math.random() * 1000) % 2 === 0,
   };
